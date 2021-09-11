@@ -2,11 +2,22 @@
   "name": "use-ceramic",
   "version": "0.0.1",
   "description": "Include Ceramic in your dApp using a single React hook",
-  "keywords": ["ceramic", "react", "dapp"],
+  "keywords": [
+    "ceramic",
+    "react",
+    "dapp"
+  ],
   "author": "Sergey Ukustov <sergey@ukstv.me>",
   "license": "(Apache-2.0 OR MIT)",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ukstv/use-ceramic.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ukstv/use-ceramic/issues"
+  },
   "files": [
     "dist/"
   ],
@@ -24,6 +35,7 @@
     "dids": "^2.4.0",
     "key-did-resolver": "^1.4.0",
     "nanoeth": "^2.6.1",
+    "rxjs": "^7.3.0",
     "tslib": "^2.2.0",
     "web3modal": "^1.9.3"
   },

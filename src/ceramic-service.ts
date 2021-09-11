@@ -12,6 +12,7 @@ import {
 import KeyDidResolver from "key-did-resolver";
 import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
 import NanoETH from "nanoeth/metamask";
+import { BehaviorSubject, Observable } from "rxjs";
 
 export type AllowedNetwork =
   | Networks.MAINNET
@@ -40,15 +41,21 @@ function ceramicEndpoint(network: AllowedNetwork): string {
 export class CeramicService {
   readonly client: CeramicApi;
   readonly idx: IDX;
+  private readonly _isAuthenticated$: BehaviorSubject<boolean>;
 
   constructor(private readonly network: AllowedNetwork, endpoint?: string) {
     const effectiveEndpoint = endpoint || ceramicEndpoint(network);
     this.client = new CeramicClient(effectiveEndpoint);
     this.idx = new IDX({ ceramic: this.client });
+    this._isAuthenticated$ = new BehaviorSubject(false);
   }
 
-  get isAuthenticated() {
-    return Boolean(this.client.did);
+  get isAuthenticated$(): Observable<boolean> {
+    return this._isAuthenticated$.asObservable();
+  }
+
+  get isAuthenticated(): boolean {
+    return this._isAuthenticated$.value;
   }
 
   get did(): DID {
@@ -96,6 +103,7 @@ export class CeramicService {
     });
     await did.authenticate();
     this.client.did = did;
+    this._isAuthenticated$.next(true);
     return did;
   }
 }
