@@ -1,6 +1,6 @@
 {
   "name": "use-ceramic",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Include Ceramic in your dApp using a single React hook",
   "keywords": [
     "ceramic",
