@@ -1,6 +1,6 @@
 {
   "name": "use-ceramic",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Include Ceramic in your dApp using a single React hook",
   "keywords": [
     "ceramic",
@@ -13,10 +13,10 @@
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ukstv/use-ceramic.git"
+    "url": "https://github.com/ceramicstudio/use-ceramic.git"
   },
   "bugs": {
-    "url": "https://github.com/ukstv/use-ceramic/issues"
+    "url": "https://github.com/ceramicstudio/use-ceramic/issues"
   },
   "files": [
     "dist/"

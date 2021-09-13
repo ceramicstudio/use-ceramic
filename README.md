@@ -120,6 +120,7 @@ interface CeramicService {
   client: CeramicApi; // Instance of Ceramic
   did: DID; // Get DID of the user. Throws an error if not authenticated yet
   isAuthenticated: boolean; // Indicate if the user is authenticated
+  isAuthenticated$: Observable<boolean>; // To subscribe for authentication updates
   idx: IDX; // Get instance of IDX
 }
 ```
@@ -134,7 +135,7 @@ For other blockchains, one can manually configure AuthProvider, i.e. not relying
 ## Possible enhancements
 
 - [ ] `useIDX` hook for querying IDX records instead of `ceramic.idx.get`,
-- [ ] `isAuthenticated$` as `Observable` to tell if a user is authenticated
+- [x] `isAuthenticated$` as `Observable` to tell if a user is authenticated
 
 ## Contributing
 
