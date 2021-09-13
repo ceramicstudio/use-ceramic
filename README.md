@@ -132,6 +132,10 @@ which together cover the majority of Ethereum wallets. It is automatically used 
 
 For other blockchains, one can manually configure AuthProvider, i.e. not relying on `connect()`, and pass it to `authenticate()` method.
 
+## Example
+
+There is an example app built on Next.js that uses `use-ceramic`: [ceramic-starter](https://github.com/ceramicstudio/ceramic-starter).
+
 ## Possible enhancements
 
 - [ ] `useIDX` hook for querying IDX records instead of `ceramic.idx.get`,
