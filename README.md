@@ -42,7 +42,7 @@ Networks.TESTNET_CLAY; // for testnet
 Networks.DEV_UNSTABLE; // for dev-unstable network
 ```
 
-This would set an appropriate public gateway endpoint for CeramicClient. Also, this would select
+This would set an appropriate public gateway endpoint for CeramicClient. Also, this would select an appropriate 3id-connect.
 
 For write operations, you would need to provide an explicit `endpoint` property, in addition to `network`:
 
