@@ -55,6 +55,10 @@ For write operations, you would need to provide an explicit `endpoint` property,
 </CeramicProvider>
 ```
 
+Alternatively, `CeramicProvider` accepts a fully configured `CeramicService` instance as a prop.
+This might be useful when a component containing `CeramicProvider` gets re-rendered and we
+need to maintain the same instance of `CeramicService`, like in Next.js.
+
 Then, include `useCeramic` hook in your component.
 
 ```typescript jsx
