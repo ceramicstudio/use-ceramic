@@ -14,11 +14,9 @@ yarn add use-ceramic # for yarn
 
 ## Usage
 
-The library provides a low-effort way to use Ceramic in a dApp. For an Ethereum dApp, we also include here support
-for Web3Modal.
+The library provides a low-effort way to use Ceramic in a dApp.
 
-Before usage, please wrap an appropriate
-part of the application in `CeramicProvider` tag. Here is an example `_app.tsx` from Next.js:
+Before use, please wrap an appropriate part of the application in `CeramicProvider` tag. Here is an example `_app.tsx` from Next.js:
 
 ```typescript jsx
 import type { AppProps } from "next/app";
@@ -34,6 +32,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 export default MyApp;
 ```
 
+### Read-only mode
+
 For read-only operations, set `network` prop to a Ceramic network of choose. Supported values are:
 
 ```typescript
@@ -44,15 +44,26 @@ Networks.DEV_UNSTABLE; // for dev-unstable network
 
 This would set an appropriate public gateway endpoint for CeramicClient. Also, this would select an appropriate 3id-connect.
 
-For write operations, you would need to provide an explicit `endpoint` property, in addition to `network`:
+### Read and write mode
+
+For write operations, you have to provide an explicit `endpoint` property, in addition to `network`.
+Also, for DID construction, we have to provide a function that returns an appropriate `AuthProvider`:
 
 ```typescript jsx
+async function connect() {
+  await window.ethereum.enable(); // For MetaMask only
+  const web3 = new Web3(window.ethereum);
+  const accounts = await web3.eth.getAccounts();
+  return new EthereumAuthProvider(provider, accounts[0]);
+}
+
 <CeramicProvider
   network={Networks.MAINNET}
   endpoint={"https://read-write-endpoint.ceramic.com"}
+  connect={connect}
 >
   ...
-</CeramicProvider>
+</CeramicProvider>;
 ```
 
 Alternatively, `CeramicProvider` accepts a fully configured `CeramicService` instance as a prop.
@@ -70,8 +81,7 @@ function SignInWithCeramic() {
   const handleLogin = async () => {
     setProgress(true);
     try {
-      const authProvider = await ceramic.connect();
-      await ceramic.authenticate(authProvider);
+      await ceramic.authenticate();
       setDid(ceramic.did.id);
     } catch (e) {
       console.error(e);
@@ -119,8 +129,8 @@ import type { IDX } from "@ceramicstudio/idx";
 import type { CeramicApi } from "@ceramicnetwork/common";
 
 interface CeramicService {
-  connect(): Promise<EthereumAuthProvider>; // Acquires a web3 provider via Web3Modal, returns an instance of EtereumAuthProvide
-  authenticate(authProvider: AuthProvider); // Sets up a Ceramic DID using the authProvider; authenticates a user
+  authenticate(authProvider?: AuthProvider); // Sets up a Ceramic DID using the authProvider; authenticates a user
+  // ^^ If passed, `authProvider` parameter is used. If not, we try to acquire it from `connect` argument of `CeramicService`.
   client: CeramicApi; // Instance of Ceramic
   did: DID; // Get DID of the user. Throws an error if not authenticated yet
   isAuthenticated: boolean; // Indicate if the user is authenticated
@@ -131,19 +141,9 @@ interface CeramicService {
 
 With these methods, you can interact fully with the user's data on Ceramic. You do not have to worry about set up of 3id-connect urls, resolvers and so on.
 
-For an Ethereum dApp here we include Web3Modal, that is configured for MetaMask (i.e. embedded web3 provider) and WalletConnect,
-which together cover the majority of Ethereum wallets. It is automatically used when `connect()` method is invoked.
-
-For other blockchains, one can manually configure AuthProvider, i.e. not relying on `connect()`, and pass it to `authenticate()` method.
-
 ## Example
 
 There is an example app built on Next.js that uses `use-ceramic`: [ceramic-starter](https://github.com/ceramicstudio/ceramic-starter).
-
-## Possible enhancements
-
-- [ ] `useIDX` hook for querying IDX records instead of `ceramic.idx.get`,
-- [x] `isAuthenticated$` as `Observable` to tell if a user is authenticated
 
 ## Contributing
 

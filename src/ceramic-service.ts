@@ -2,16 +2,9 @@ import { CeramicApi, Networks } from "@ceramicnetwork/common";
 import CeramicClient from "@ceramicnetwork/http-client";
 import { IDX } from "@ceramicstudio/idx";
 import { DID } from "dids";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import Web3Modal from "web3modal";
-import {
-  EthereumAuthProvider,
-  ThreeIdConnect,
-  AuthProvider,
-} from "@3id/connect";
+import { ThreeIdConnect, AuthProvider } from "@3id/connect";
 import KeyDidResolver from "key-did-resolver";
 import ThreeIdResolver from "@ceramicnetwork/3id-did-resolver";
-import NanoETH from "nanoeth/metamask";
 import { BehaviorSubject, Observable } from "rxjs";
 
 export type AllowedNetwork =
@@ -42,12 +35,18 @@ export class CeramicService {
   readonly client: CeramicApi;
   readonly idx: IDX;
   private readonly _isAuthenticated$: BehaviorSubject<boolean>;
+  private readonly connect: () => Promise<AuthProvider> | undefined;
 
-  constructor(private readonly network: AllowedNetwork, endpoint?: string) {
+  constructor(
+    private readonly network: AllowedNetwork,
+    endpoint?: string,
+    connect?: () => Promise<AuthProvider>
+  ) {
     const effectiveEndpoint = endpoint || ceramicEndpoint(network);
     this.client = new CeramicClient(effectiveEndpoint);
     this.idx = new IDX({ ceramic: this.client });
     this._isAuthenticated$ = new BehaviorSubject(false);
+    this.connect = connect;
   }
 
   get isAuthenticated$(): Observable<boolean> {
@@ -66,33 +65,10 @@ export class CeramicService {
     }
   }
 
-  async connect() {
-    const providerOptions = {
-      injected: {
-        package: null,
-      },
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          infuraId: "b407db983da44def8a68e3fdb6bea776",
-        },
-      },
-    };
-
-    const web3Modal = new Web3Modal({
-      network: "mainnet", // optional
-      cacheProvider: false, // optional
-      providerOptions, // required
-    });
-    const provider = await web3Modal.connect();
-    const eth = new NanoETH(provider);
-    const accounts = await eth.accounts();
-    return new EthereumAuthProvider(provider, accounts[0]);
-  }
-
-  async authenticate(authProvider: AuthProvider): Promise<DID> {
+  async authenticate(authProvider?: AuthProvider): Promise<DID> {
+    const provider = authProvider || (await this.connect());
     const threeIdConnect = new ThreeIdConnect(this.network);
-    await threeIdConnect.connect(authProvider);
+    await threeIdConnect.connect(provider);
     const didProvider = threeIdConnect.getDidProvider();
     const did = new DID({
       provider: didProvider,

@@ -1,6 +1,6 @@
 {
   "name": "use-ceramic",
-  "version": "0.0.6",
+  "version": "1.0.0",
   "description": "Include Ceramic in your dApp using a single React hook",
   "keywords": [
     "ceramic",
@@ -31,13 +31,10 @@
     "@ceramicnetwork/common": "^1.4.0",
     "@ceramicnetwork/http-client": "^1.2.1",
     "@ceramicstudio/idx": "^0.12.2",
-    "@walletconnect/web3-provider": "^1.6.5",
     "dids": "^2.4.0",
     "key-did-resolver": "^1.4.0",
-    "nanoeth": "^2.6.1",
     "rxjs": "^7.3.0",
-    "tslib": "^2.2.0",
-    "web3modal": "^1.9.3"
+    "tslib": "^2.2.0"
   },
   "devDependencies": {
     "prettier": "^2.4.0",
