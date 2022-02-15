@@ -1,5 +1,9 @@
 # useCeramic
 
+> ⚠️🛑 DEPRECATED in favor of `@self.id/react` and `@self.id/framework` 🛑⚠️
+> 
+> [@self.id/react](https://github.com/ceramicstudio/self.id/tree/main/packages/react) provides a headless experience (developers need to handle the wallet flow) while [@self.id/framework](https://github.com/ceramicstudio/self.id/tree/main/packages/framework) handles wallet authentication with our custom library and UI.
+
 Single React hook for everything Ceramic in a dApp.
 
 ## Installation
